@@ -18,18 +18,23 @@ func InitReceiptsController() {
 func ProcessReceipt(w http.ResponseWriter, r *http.Request) {
 	var req model.ProcessReceiptRequest
 
-	//Validate request
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, err.Error(),http.StatusBadRequest)
 	} else {
-		
-	//Process request
-		res := service.ProcessReceipt(req)
+	
+		//Validate request
+		if !model.Validate(req) {
+			http.Error(w, "The receipt is invalid.",http.StatusBadRequest)
+		} else {
+			//Process request
+			res := service.ProcessReceipt(req)
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(res)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(res)
+		}
 	}
+	
 	
 }
 
