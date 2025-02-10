@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"main/api/controllers"
+	"main/internal/data"
 	"net/http"
 )
 
@@ -16,6 +17,7 @@ func routeHandler() {
 }
 
 func main() {
+	data.InitDb()
 	routeHandler()
 	requestHandler()
 }

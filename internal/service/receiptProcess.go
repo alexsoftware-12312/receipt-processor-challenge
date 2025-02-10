@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"main/internal/data"
 	"main/internal/model"
 	"math"
 	"regexp"
@@ -75,5 +76,7 @@ func ProcessReceipt(receipt model.ProcessReceiptRequest) model.ProcessReceiptRes
 	}
 	log.Println(scoreTrack)
 	result.Id = uuid.NewString()
+	
+	data.StoreProcessedReceipt(result.Id, scoreTrack)
 	return result
 }

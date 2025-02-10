@@ -39,11 +39,17 @@ func GetPoints(w http.ResponseWriter, r *http.Request) {
 	if id == "" {
 		http.Error(w, "Invalid Id",http.StatusBadRequest)
 	} else {
-		res:= model.GetPointsResponse{
-			Points: data.GetDataById(id),
+		points := data.GetDataById(id)
+		if points == -1 {
+			w.Header().Set("Content-Type", "application/json")
+			http.Error(w, "No receipt found for that ID.", http.StatusNotFound)
+		} else {
+			res:= model.GetPointsResponse{
+				Points: points,
+			}
+			
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(res)
 		}
-		
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(res)
 	}
 }
